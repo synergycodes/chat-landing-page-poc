@@ -28,10 +28,11 @@ document.addEventListener("DOMContentLoaded", function () {
   const scrollThreshold = 250;
 
   // Function to create a message element
-  function createMessage(text, isSelf) {
+  function createMessage(text, isSelf, index) {
     let div = document.createElement("div");
     div.className = "message" + (isSelf ? " self" : " other");
     div.innerText = text;
+    div.id = "message" + index;
     div.style.opacity = "0"; // Start with message invisible
     return div;
   }
@@ -52,7 +53,8 @@ document.addEventListener("DOMContentLoaded", function () {
         for (let i = 0; i < messagesToAdd; i++) {
           let message = createMessage(
             messages[loadedIndex],
-            loadedIndex % 2 === 0
+            loadedIndex % 2 === 0,
+            loadedIndex
           );
           chatContainer.appendChild(message);
           setTimeout(() => {
@@ -66,12 +68,16 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
       // Scrolling up
       // Hide messages that are higher than the current scroll position
-      Array.from(chatContainer.children).forEach((message) => {
-        let messageBox = message.getBoundingClientRect();
-        if (messageBox.top > window.innerHeight) {
-          message.style.opacity = "0";
-        }
-      });
+      const messagesToRemove = Math.floor((loadedMessageScrollPosition - currentScroll) / scrollThreshold);
+      if (messagesToRemove > 0) {
+        const messages = Array.from(chatContainer.children);
+        const removing = messages.slice(messages.length - messagesToRemove);
+        removing.forEach(m => {
+          chatContainer.removeChild(m);
+          loadedIndex--;
+          loadedMessageScrollPosition = currentScroll;
+        });
+      }
     }
     lastScrollTop = currentScroll <= 0 ? 0 : currentScroll; // Reset lastScrollTop at the top
   });
