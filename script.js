@@ -23,7 +23,9 @@ document.addEventListener("DOMContentLoaded", function () {
     "Thanks, you too!",
   ];
   let loadedIndex = 0;
+  let loadedMessageScrollPosition = 0;
   let lastScrollTop = 0; // Variable to store the last scroll position
+  const scrollThreshold = 250;
 
   // Function to create a message element
   function createMessage(text, isSelf) {
@@ -43,18 +45,22 @@ document.addEventListener("DOMContentLoaded", function () {
       // Scrolling down
       // Load more messages if needed
       if (
-        currentScroll > lastScrollTop + 100 &&
+        currentScroll > lastScrollTop &&
         loadedIndex < messages.length
       ) {
-        let message = createMessage(
-          messages[loadedIndex],
-          loadedIndex % 2 === 0
-        );
-        chatContainer.appendChild(message);
-        setTimeout(() => {
-          message.style.opacity = "1";
-        }, 100);
-        loadedIndex++;
+        const messagesToAdd = Math.floor((currentScroll - loadedMessageScrollPosition) / scrollThreshold);
+        for (let i = 0; i < messagesToAdd; i++) {
+          let message = createMessage(
+            messages[loadedIndex],
+            loadedIndex % 2 === 0
+          );
+          chatContainer.appendChild(message);
+          setTimeout(() => {
+            message.style.opacity = "1";
+          }, 100);
+          loadedIndex++;
+          loadedMessageScrollPosition = currentScroll;
+        }
         lastScrollTop = currentScroll;
       }
     } else {
