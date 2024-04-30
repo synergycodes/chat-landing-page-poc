@@ -1,0 +1,45 @@
+body, html {
+  height: 8000px; /* Set the total height of the page */
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  overflow-y: scroll; /* Ensure the page is scrollable */
+}
+
+#container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+}
+
+#chat-container {
+  position: fixed; /* Fixed position to keep it visible */
+  top: 40px; /* Position from the top of the viewport */
+  width: 500px; /* Fixed width of the chat container */
+  height: 90vh;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  overflow-y: auto; /* Enable scrolling inside the container */
+}
+
+.message {
+  padding: 10px;
+  border-radius: 8px;
+  color: #fff;
+  margin-bottom: 10px; /* Space between messages */
+}
+
+.self {
+  background-color: #007bff;
+  align-self: flex-end;
+}
+
+.other {
+  background-color: #e5e5ea;
+  color: black;
+  align-self: flex-start;
+}
