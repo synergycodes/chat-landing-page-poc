@@ -28,12 +28,17 @@ document.addEventListener("DOMContentLoaded", function () {
   const scrollThreshold = 250;
 
   // Function to create a message element
-  function createMessage(text, isSelf, index) {
+  function createMessage(text, isSelf) {
     let div = document.createElement("div");
     div.className = "message" + (isSelf ? " self" : " other");
-    div.innerText = text;
-    div.id = "message" + index;
-    div.style.opacity = "0"; // Start with message invisible
+    if (isSelf) {
+      div.innerText = text;
+    } else {
+      div.innerText = "...";
+      setTimeout(() => {
+        div.innerText = text;
+      }, 250);
+    }
     return div;
   }
 
@@ -53,13 +58,9 @@ document.addEventListener("DOMContentLoaded", function () {
         for (let i = 0; i < messagesToAdd; i++) {
           let message = createMessage(
             messages[loadedIndex],
-            loadedIndex % 2 === 0,
-            loadedIndex
+            loadedIndex % 2 === 0
           );
           chatContainer.appendChild(message);
-          setTimeout(() => {
-            message.style.opacity = "1";
-          }, 100);
           loadedIndex++;
           loadedMessageScrollPosition = currentScroll;
         }
